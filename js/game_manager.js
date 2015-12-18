@@ -4,14 +4,13 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.storageManager = new StorageManager;
   this.actuator       = new Actuator;
 
-  this.startTiles     = 2;
-
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
   this.setup();
 }
+GameManager.prototype.startTiles = 16;
 
 // Restart the game
 GameManager.prototype.restart = function () {
@@ -244,9 +243,10 @@ GameManager.prototype.tileMatchesAvailable = function () {
   var self = this;
 
   var tile;
-
-  for (var x = 0; x < this.size; x++) {
-    for (var y = 0; y < this.size; y++) {
+  var size = this.size;
+  //console.log(['start', +new Date()]);
+  for (var x = 0; x < size; x++) {
+    for (var y = 0; y < size; y++) {
       tile = this.grid.cellContent({ x: x, y: y });
 
       if (tile) {
@@ -257,13 +257,14 @@ GameManager.prototype.tileMatchesAvailable = function () {
           var other  = self.grid.cellContent(cell);
 
           if (other && other.value === tile.value) {
+            //console.log(['end1', +new Date()]);
             return true; // These two tiles can be merged
           }
         }
       }
     }
   }
-
+  //console.log(['end2', +new Date()]);
   return false;
 };
 
