@@ -756,3 +756,7 @@ hr {
     margin-top: 90px !important; }
   .game-message .lower {
     margin-top: 30px !important; } }
+
+.elapsedTime {
+  display: block;
+}

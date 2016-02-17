@@ -1,6 +1,6 @@
 {
     "esnext": true,
-    "indent": 2,
+    "indent": 4,
     "maxlen": 80,
     "freeze": true,
     "camelcase": true,

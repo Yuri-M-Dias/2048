@@ -7,10 +7,12 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
-
+  this.beginGameTime = new Date();
+  this.endGameTime = 0;
+  this.elapsedTime = 0;
   this.setup();
 }
-GameManager.prototype.startTiles = 16;
+GameManager.prototype.startTiles = 2;
 
 // Restart the game
 GameManager.prototype.restart = function () {
@@ -48,7 +50,8 @@ GameManager.prototype.setup = function () {
     this.over        = false;
     this.won         = false;
     this.keepPlaying = false;
-
+    this.beginGameTime = new Date();
+    this.endGameTime = 0;
     // Add the initial tiles
     this.addStartTiles();
   }
@@ -92,7 +95,8 @@ GameManager.prototype.actuate = function () {
     over:       this.over,
     won:        this.won,
     bestScore:  this.storageManager.getBestScore(),
-    terminated: this.isGameTerminated()
+    terminated: this.isGameTerminated(),
+    elapsedTime: this.getElapsedTime()
   });
 
 };
@@ -183,6 +187,8 @@ GameManager.prototype.move = function (direction) {
 
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
+      this.endGameTime = new Date();
+      this.calculateElapsedTime()
     }
 
     this.actuate();
@@ -270,4 +276,12 @@ GameManager.prototype.tileMatchesAvailable = function () {
 
 GameManager.prototype.positionsEqual = function (first, second) {
   return first.x === second.x && first.y === second.y;
+};
+
+GameManager.prototype.calculateElapsedTime = function () {
+  this.elapsedTime = (this.endGameTime - this.beginGameTime) / 1000;
+};
+
+GameManager.prototype.getElapsedTime = function () {
+  return this.elapsedTime;
 };
