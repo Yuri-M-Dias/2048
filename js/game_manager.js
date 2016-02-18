@@ -7,18 +7,22 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+  this.inputManager.on("againstTimeMode", this.againstTimeMode.bind(this));
+
   this.beginGameTime = new Date();
   this.endGameTime = 0;
   this.elapsedTime = 0;
+  this.mode = "normalGame";
+  this.timeOver = false;
   this.setup();
 }
 GameManager.prototype.startTiles = 2;
 
 // Restart the game
-GameManager.prototype.restart = function () {
+GameManager.prototype.restart = function (gameMode) {
   this.storageManager.clearGameState();
   this.actuator.continueGame(); // Clear the game won/lost message
-  this.setup();
+  this.setup(gameMode);
 };
 
 // Keep playing after winning (allows going over 2048)
@@ -33,7 +37,7 @@ GameManager.prototype.isGameTerminated = function () {
 };
 
 // Set up the game
-GameManager.prototype.setup = function () {
+GameManager.prototype.setup = function (gameMode) {
   var previousState = this.storageManager.getGameState();
 
   // Reload the game from a previous game if present
@@ -54,6 +58,11 @@ GameManager.prototype.setup = function () {
     this.endGameTime = 0;
     // Add the initial tiles
     this.addStartTiles();
+  }
+
+  if (gameMode == "againstTime") {
+    this.mode = "againstTime";
+    this.actuator.init();
   }
 
   // Update the actuator
@@ -96,7 +105,8 @@ GameManager.prototype.actuate = function () {
     won:        this.won,
     bestScore:  this.storageManager.getBestScore(),
     terminated: this.isGameTerminated(),
-    elapsedTime: this.getElapsedTime()
+    elapsedTime: this.getElapsedTime(),
+    gameMode: this.gameMode
   });
 
 };
@@ -185,10 +195,10 @@ GameManager.prototype.move = function (direction) {
   if (moved) {
     this.addRandomTile();
 
-    if (!this.movesAvailable()) {
+    if (!this.movesAvailable() || this.timeOver == true) {
       this.over = true; // Game over!
       this.endGameTime = new Date();
-      this.calculateElapsedTime()
+      this.calculateElapsedTime();
     }
 
     this.actuate();
@@ -284,4 +294,9 @@ GameManager.prototype.calculateElapsedTime = function () {
 
 GameManager.prototype.getElapsedTime = function () {
   return this.elapsedTime;
+};
+
+GameManager.prototype.againstTimeMode = function () {
+  var gameMode = "againstTime";
+  this.restart("againstTime");
 };

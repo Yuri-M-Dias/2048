@@ -513,7 +513,6 @@ hr {
   clear: both; }
 
 .game-intro {
-  float: left;
   line-height: 42px;
   margin-bottom: 0; }
 
@@ -526,7 +525,6 @@ hr {
   color: #f9f6f2;
   height: 40px;
   line-height: 42px;
-  display: block;
   text-align: center;
   float: right; }
 
@@ -757,6 +755,14 @@ hr {
   .game-message .lower {
     margin-top: 30px !important; } }
 
-.elapsedTime {
+.hide {
+  display: none;
+}
+
+.show {
   display: block;
+}
+
+.against-time-button {
+
 }
