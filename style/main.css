@@ -766,3 +766,11 @@ hr {
 .against-time-button {
 
 }
+
+.divider {
+  display: inline-block;
+}
+
+#timer {
+  position: absolute;
+}

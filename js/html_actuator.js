@@ -24,7 +24,7 @@ HTMLActuator.prototype.init = function () {
         if (seconds <= 0) {
             clearInterval(self.timeinterval);
         }
-    }, 1000);
+    }, 500);
 };
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
