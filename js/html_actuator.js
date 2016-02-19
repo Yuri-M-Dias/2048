@@ -5,26 +5,15 @@ function HTMLActuator() {
     this.messageContainer = document.querySelector(".game-message");
     this.elapsedTimeDiv = document.getElementById('elapsedTime');
     this.gameMode = document.getElementById('gameMode');
+    this.timerDiv = document.getElementById("timer");
     this.score = 0;
-    this.timeInterval = 0;
+    this.intervalId = 0;
 }
 
-function getTimeRemaining(initialDate, endtime) {
-    return new Date((initialDate - new (Date))).getSeconds();
-}
-
-HTMLActuator.prototype.init = function () {
-    var self = this;
-    clearInterval(this.timeinterval);
-    var initialDate = +(new Date()) + 60000;
+HTMLActuator.prototype.clearAgainsTimeMode = function () {
     var timer = document.getElementById("timer");
-    this.timeinterval = setInterval(function () {
-        var seconds = getTimeRemaining(initialDate);
-        timer.innerHTML = 'Time remaining: ' + seconds + ' seconds';
-        if (seconds <= 0) {
-            clearInterval(self.timeinterval);
-        }
-    }, 500);
+    clearInterval(this.intervalId);
+    timer.innerHTML = '';
 };
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
