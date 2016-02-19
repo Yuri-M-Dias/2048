@@ -84,8 +84,7 @@ function getTimeRemaining(initialDate, endtime) {
 GameManager.prototype.initAgainstMode = function () {
     var self = this;
     this.actuator.clearAgainsTimeMode();
-    //this.gameTimeAgainstMode = +(new Date()) + 60000;
-    this.gameTimeAgainstMode = +(new Date()) + 5000;
+    this.gameTimeAgainstMode = +(new Date()) + 60000;
     this.intervalId = setInterval(function () {
         var seconds = getTimeRemaining(self.gameTimeAgainstMode);
         self.actuator.timerDiv.innerHTML = 'Time remaining: ' + seconds + ' seconds';
