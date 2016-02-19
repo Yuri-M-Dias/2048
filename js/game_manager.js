@@ -70,6 +70,7 @@ GameManager.prototype.setup = function (gameMode) {
         clearInterval(this.intervalId);
         this.initAgainstMode();
     } else {
+        this.gameMode = "normalGame";
         this.actuator.clearAgainsTimeMode();
     }
 
@@ -316,7 +317,7 @@ GameManager.prototype.positionsEqual = function (first, second) {
 };
 
 GameManager.prototype.calculateElapsedTime = function () {
-    this.elapsedTime = (this.endGameTime - this.beginGameTime) / 1000;
+    this.elapsedTime = Math.round((((this.endGameTime - this.beginGameTime) / 1000) * 100)) / 100;
 };
 
 GameManager.prototype.getElapsedTime = function () {

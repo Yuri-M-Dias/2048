@@ -20,16 +20,17 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     var self = this;
 
     window.requestAnimationFrame(function () {
-        self.clearContainer(self.tileContainer);
+        if (!(metadata.gameMode == "againstTime" && metadata.terminated == true)) {
+            self.clearContainer(self.tileContainer);
 
-        grid.cells.forEach(function (column) {
-            column.forEach(function (cell) {
-                if (cell) {
-                    self.addTile(cell);
-                }
+            grid.cells.forEach(function (column) {
+                column.forEach(function (cell) {
+                    if (cell) {
+                        self.addTile(cell);
+                    }
+                });
             });
-        });
-
+        }
         self.updateScore(metadata.score);
         self.updateBestScore(metadata.bestScore);
 
@@ -40,7 +41,6 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
                 self.message(true, metadata); // You win!
             }
         }
-
     });
 };
 
@@ -140,11 +140,14 @@ HTMLActuator.prototype.message = function (won, metadata) {
     this.messageContainer.classList.add(type);
     this.messageContainer.getElementsByTagName("p")[0].textContent = message;
     if (metadata.gameMode == "normalGame") {
+        this.gameMode.className = "hide";
         this.elapsedTimeDiv.className = "show";
-        this.elapsedTimeDiv.innerHTML = "Elapsed Time: " + metadata.elapsedTime + "seconds";
+        this.elapsedTimeDiv.innerHTML = "Game Mode: Normal Game <br> Score: " + metadata.score + " points<br> Elapsed Time: "
+            + metadata.elapsedTime + " seconds";
     } else {
+        this.elapsedTimeDiv.className = "hide";
         this.gameMode.className = "show";
-        this.gameMode.innerHTML = "Game Mode: Against Time <br> Score: " + metadata.score;
+        this.gameMode.innerHTML = "Game Mode: Against Time <br> Score: " + metadata.score + " points";
     }
 };
 
